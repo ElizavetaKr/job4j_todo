@@ -14,6 +14,7 @@ public class Task {
     private int id;
 
     private String description;
+    @EqualsAndHashCode.Exclude
     private LocalDateTime created;
     private boolean done;
 
