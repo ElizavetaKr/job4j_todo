@@ -23,7 +23,6 @@ public class CrudRepository {
         });
     }
 
-
     public void run(String query, Map<String, Object> args) {
         Consumer<Session> command = session -> {
             var sq = session.createQuery(query);
