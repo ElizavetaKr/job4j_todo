@@ -3,8 +3,9 @@ package ru.job4j.todo.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.google.errorprone.annotations.ThreadSafe;
+
 import lombok.AllArgsConstructor;
+import net.jcip.annotations.ThreadSafe;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

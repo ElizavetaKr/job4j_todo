@@ -1,12 +1,14 @@
 package ru.job4j.todo.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
 
@@ -17,4 +19,7 @@ public class User {
     private String name;
     private String login;
     private String password;
+
+    public User() {
+    }
 }

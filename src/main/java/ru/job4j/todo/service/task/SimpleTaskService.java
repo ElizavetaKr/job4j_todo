@@ -38,4 +38,19 @@ public class SimpleTaskService implements TaskService {
     public Collection<Task> findAll() {
         return taskRepository.findAll();
     }
+
+    @Override
+    public Collection<Task> findNew() {
+        return taskRepository.findNew();
+    }
+
+    @Override
+    public Collection<Task> findDone() {
+        return taskRepository.findDone();
+    }
+
+    @Override
+    public boolean updateDone(int id) {
+        return taskRepository.updateDone(id);
+    }
 }

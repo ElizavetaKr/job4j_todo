@@ -15,4 +15,10 @@ public interface TaskRepository {
     Optional<Task> findById(int id);
 
     Collection<Task> findAll();
+
+    Collection<Task> findNew();
+
+    Collection<Task> findDone();
+
+    boolean updateDone(int id);
 }

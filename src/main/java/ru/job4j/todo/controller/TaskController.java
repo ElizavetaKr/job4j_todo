@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.service.task.TaskService;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Optional;
 
 @Controller
@@ -51,35 +49,19 @@ public class TaskController {
 
     @GetMapping("/new")
     public String getNew(Model model) {
-        Collection<Task> tasks = new ArrayList<>();
-        for (Task task : taskService.findAll()) {
-            if (!task.isDone()) {
-                tasks.add(task);
-            }
-        }
-        model.addAttribute("tasks", tasks);
+        model.addAttribute("tasks", taskService.findNew());
         return "tasks/new";
     }
 
     @GetMapping("/done")
     public String getDone(Model model) {
-        Collection<Task> tasks = new ArrayList<>();
-        for (Task task : taskService.findAll()) {
-            if (task.isDone()) {
-                tasks.add(task);
-            }
-        }
-        model.addAttribute("tasks", tasks);
+        model.addAttribute("tasks", taskService.findDone());
         return "tasks/done";
     }
 
     @PostMapping("/add")
-    public String add(Model model, @ModelAttribute Task task) {
-        Task savedTask = taskService.save(task);
-        if (savedTask == null) {
-            model.addAttribute("error", "Произошла ошибка");
-            return "tasks/add";
-        }
+    public String add(@ModelAttribute Task task) {
+        taskService.save(task);
         return "redirect:/tasks";
     }
 
@@ -122,15 +104,11 @@ public class TaskController {
 
     @GetMapping("/complete/{taskId}")
     public String completeTask(Model model, @PathVariable int taskId) {
-        Optional<Task> taskOpt = taskService.findById(taskId);
-        if (taskOpt.isEmpty()) {
-            model.addAttribute("message", "Задание не найдено");
-            return "errors/404";
+        boolean isUpdated = taskService.updateDone(taskId);
+        if (!isUpdated) {
+            model.addAttribute("error", "Произошла ошибка");
+            return "tasks/update";
         }
-        Task task = taskOpt.get();
-        task.setDone(true);
-        taskService.update(task);
-        model.addAttribute("task", task);
         return "redirect:/tasks";
     }
 }

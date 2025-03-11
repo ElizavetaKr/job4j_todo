@@ -5,21 +5,28 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 @Table(name = "tasks")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private int id;
 
+    private String title;
     private String description;
-    @EqualsAndHashCode.Exclude
-    private LocalDateTime created;
-    private boolean done;
+    private LocalDateTime created = LocalDateTime.now();
+    private boolean done = false;
 
-    public Task() {
-        created = LocalDateTime.now();
-        done = false;
+    Task() {
+    }
+
+    Task(int id, String title, String description) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
     }
 }

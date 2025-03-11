@@ -33,13 +33,18 @@ public class HibernateUserRepository implements UserRepository {
 
     @Override
     public Optional<User> findByLoginAndPassword(String login, String password) {
-        User user;
+        Optional<User> userOpt = Optional.empty();
         Session session = sf.openSession();
-        Query query = session.createQuery("from User WHERE login = :fLogin AND password = :f= :fPassword")
-        .setParameter("fLogin", login)
-        .setParameter("fPassword", password);
-        user = (User) query.uniqueResult();
-        session.close();
-        return Optional.ofNullable(user);
+        try {
+            Query query = session.createQuery("from User WHERE login = :fLogin AND password = :fPassword")
+                    .setParameter("fLogin", login)
+                    .setParameter("fPassword", password);
+            userOpt = query.uniqueResultOptional();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return userOpt;
     }
 }
