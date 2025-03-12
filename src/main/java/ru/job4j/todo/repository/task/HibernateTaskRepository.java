@@ -26,7 +26,7 @@ public class HibernateTaskRepository implements TaskRepository {
 
     @Override
     public boolean update(Task task) {
-        return crudRepository.booleanQuery(session -> session.merge(task));
+        return crudRepository.booleanQuery(session -> session.update(task));
     }
 
     @Override
