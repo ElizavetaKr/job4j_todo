@@ -49,25 +49,13 @@ public class HibernateTaskRepository implements TaskRepository {
 
     @Override
     public List<Task> findNew() {
-        List<Task> result = new ArrayList<>();
-        List<Task> all = findAll();
-        for (Task t : all) {
-            if (!t.isDone()) {
-                result.add(t);
-            }
-        }
-        return result;
+        String query = "from Task WHERE done = false";
+        return crudRepository.query(query, Task.class);
     }
 
     @Override
     public List<Task> findDone() {
-        List<Task> result = new ArrayList<>();
-        List<Task> all = findAll();
-        for (Task t : all) {
-            if (t.isDone()) {
-                result.add(t);
-            }
-        }
-        return result;
+        String query = "from Task WHERE done = true";
+        return crudRepository.query(query, Task.class);
     }
 }
