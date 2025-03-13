@@ -14,25 +14,27 @@ public class HibernateTaskRepository implements TaskRepository {
 
     @Override
     public Task save(Task task) {
-        crudRepository.run(session -> session.persist(task));
+        crudRepository.run(session -> session.save(task));
         return task;
     }
 
     @Override
     public boolean deleteById(int id) {
         String query = "DELETE Task WHERE id = :fId";
-        return crudRepository.booleanQuery(query, Map.of("fId", id));
+        return crudRepository.query(query, Map.of("fId", id));
     }
 
     @Override
     public boolean update(Task task) {
-        return crudRepository.booleanQuery(session -> session.update(task));
+        String query = "UPDATE Task SET title = :fTitle, description = :fDesc WHERE id = :fId";
+        return crudRepository.query(query,
+                Map.of("fTitle", task.getTitle(), "fDesc", task.getDescription(), "fId", task.getId()));
     }
 
     @Override
     public boolean updateDone(int id) {
         String query = "UPDATE Task SET done = :fDone WHERE id = :fId";
-        return crudRepository.booleanQuery(query, Map.of("fDone", true, "fId", id));
+        return crudRepository.query(query, Map.of("fDone", true, "fId", id));
     }
 
     @Override

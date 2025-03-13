@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.task.TaskService;
 
 import java.util.Optional;
@@ -91,13 +92,14 @@ public class TaskController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute Task task) {
+    public String add(@ModelAttribute Task task, @SessionAttribute User user) {
+        task.setUser(user);
         taskService.save(task);
         return "redirect:/tasks";
     }
 
-    @PostMapping("/update/{taskId}")
-    public String update(Model model, @ModelAttribute Task task, @PathVariable int taskId) {
+    @PostMapping("/update")
+    public String update(Model model, @ModelAttribute Task task) {
         boolean isUpdated = taskService.update(task);
         if (!isUpdated) {
             model.addAttribute("error", "Произошла ошибка");

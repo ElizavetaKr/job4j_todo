@@ -25,17 +25,6 @@ public class CrudRepository {
         });
     }
 
-    public void run(String query, Map<String, Object> args) {
-        Consumer<Session> command = session -> {
-            var sq = session.createQuery(query);
-            for (Map.Entry<String, Object> arg : args.entrySet()) {
-                sq.setParameter(arg.getKey(), arg.getValue());
-            }
-            sq.executeUpdate();
-        };
-        run(command);
-    }
-
     public <T> Optional<T> optional(String query, Map<String, Object> args, Class<T> cl) {
         Function<Session, Optional<T>> command = session -> {
             Query sq = session.createQuery(query, cl);
@@ -47,7 +36,7 @@ public class CrudRepository {
         return tx(command);
     }
 
-    public boolean booleanQuery(String query, Map<String, Object> args) {
+    public boolean query(String query, Map<String, Object> args) {
         Function<Session, Boolean> command = session -> {
             Query sq = session.createQuery(query);
             for (Map.Entry<String, Object> arg : args.entrySet()) {
@@ -58,28 +47,9 @@ public class CrudRepository {
         return tx(command);
     }
 
-    public boolean booleanQuery(Consumer<Session> consumer) {
-        Function<Session, Boolean> command = session -> {
-            consumer.accept(session);
-            return true;
-        };
-        return tx(command);
-    }
-
     public <T> List<T> query(String query, Class<T> cl) {
         Function<Session, List<T>> command = session ->
                 session.createQuery(query, cl).list();
-        return tx(command);
-    }
-
-    public <T> List<T> query(String query, Map<String, Object> args, Class<T> cl) {
-        Function<Session, List<T>> command = session -> {
-            Query sq = session.createQuery(query, cl);
-            for (Map.Entry<String, Object> arg : args.entrySet()) {
-                sq.setParameter(arg.getKey(), arg.getValue());
-            }
-            return sq.list();
-        };
         return tx(command);
     }
 

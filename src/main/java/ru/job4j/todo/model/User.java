@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @AllArgsConstructor
 @Table(name = "users")

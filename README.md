@@ -8,11 +8,11 @@
 Так же есть авторизация пользователя.
 ***
 ## В данном проекте используются: 
-Java 17, Spring Boot 2.7.3, Thymeleaf, 
+Java 17, Spring Boot 2.7.6, Thymeleaf, 
 
-Liquibase 4.15.0, Hibernate 5.6.11, 
+Liquibase 4.28.0, Hibernate 5.6.11, 
 
-Lombok 1.18.30, PostgreSQL 16, Checkstyle 8.42
+Lombok 1.18.30, PostgreSQL 16, Checkstyle 9.0
 ***
 ## Требования к окружению:
 Java 17
