@@ -9,6 +9,9 @@
         <div class="mb-3" th:if="${error}">
             <p class="text-danger" th:text="${error}"></p>
         </div>
+        <div>
+            <input type="hidden" name="id" th:value="${task.id}">
+        </div>
         <div class="mb-3">
             <label for="title" class="form-label"><b>Задача</b></label>
             <input type="text" class="form-control" id="title" name="title"
