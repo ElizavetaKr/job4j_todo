@@ -25,13 +25,18 @@ public class Task {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "priority_id")
+    private Priority priority;
+
     Task() {
     }
 
-    Task(int id, String title, String description, User user) {
+    Task(int id, String title, String description, User user, Priority priority) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.user = user;
+        this.priority = priority;
     }
 }

@@ -13,6 +13,7 @@
             <th scope="col">Описание задачи</th>
             <th scope="col">Дата создания</th>
             <th scope="col">Пользователь</th>
+            <th scope="col">Приоритет</th>
             <th scope="col">Выполнена</th>
         </tr>
         </thead>
@@ -27,6 +28,7 @@
             <td th:text="${task.description}"/>
             <td th:text="${#temporals.format(task.created, 'dd-MMM-yyyy')}"/>
             <td th:text="${task.user.name}"/>
+            <td th:text="${task.priority.position}"/>
             <td>
                 <div class="mb-3" th:if="${task.done}">
                     Да

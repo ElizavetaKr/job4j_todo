@@ -26,9 +26,10 @@ public class HibernateTaskRepository implements TaskRepository {
 
     @Override
     public boolean update(Task task) {
-        String query = "UPDATE Task SET title = :fTitle, description = :fDesc WHERE id = :fId";
+        String query = "UPDATE Task SET title = :fTitle, description = :fDesc, priority_id = :fPrior WHERE id = :fId";
         return crudRepository.query(query,
-                Map.of("fTitle", task.getTitle(), "fDesc", task.getDescription(), "fId", task.getId()));
+                Map.of("fTitle", task.getTitle(), "fDesc", task.getDescription(), "fId", task.getId(),
+                        "fPrior", task.getPriority()));
     }
 
     @Override
@@ -39,25 +40,25 @@ public class HibernateTaskRepository implements TaskRepository {
 
     @Override
     public Optional<Task> findById(int id) {
-        String query = "from Task WHERE id = :fId";
+        String query = "from Task f JOIN FETCH f.priority WHERE f.id = :fId";
         return crudRepository.optional(query, Map.of("fId", id), Task.class);
     }
 
     @Override
     public List<Task> findAll() {
-        String query = "from Task";
+        String query = "from Task f JOIN FETCH f.priority";
         return crudRepository.query(query, Task.class);
     }
 
     @Override
     public List<Task> findNew() {
-        String query = "from Task WHERE done = false";
+        String query = "from Task f JOIN FETCH f.priority WHERE f.done = false";
         return crudRepository.query(query, Task.class);
     }
 
     @Override
     public List<Task> findDone() {
-        String query = "from Task WHERE done = true";
+        String query = "from Task f JOIN FETCH f.priority WHERE f.done = true";
         return crudRepository.query(query, Task.class);
     }
 }

@@ -22,6 +22,12 @@
             <input type="text" class="form-control" id="description" name="description"
                    th:value="${task.description}" placeholder="Опишите задачу">
         </div>
+        <div class="mb-3">
+            <label for="priority.id"><b>Приоритет задачи</b></label>
+            <select class="form-control" id="priority.id" name="priority.id">
+                <option th:each="priorityId : ${priorities}" th:value="${priorityId.id}" th:text="${priorityId.name}"></option>
+            </select>
+        </div>
 
         <div class="mb-3 row">
             <div class="col-6"></div>
