@@ -4,12 +4,18 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.repository.category.CategoryRepository;
+import ru.job4j.todo.service.category.CategoryService;
 import ru.job4j.todo.service.priority.PriorityService;
 import ru.job4j.todo.service.task.TaskService;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 @AllArgsConstructor
@@ -17,6 +23,7 @@ import java.util.Optional;
 public class TaskController {
     private final TaskService taskService;
     private final PriorityService priorityService;
+    private final CategoryService categoryService;
 
     @GetMapping
     public String getAllTasks(Model model) {
@@ -27,18 +34,21 @@ public class TaskController {
     @GetMapping("/add")
     public String getAdd(Model model) {
         model.addAttribute("priorities", priorityService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         return "tasks/add";
     }
 
     @GetMapping("/all")
     public String getAll(Model model) {
         model.addAttribute("priorities", priorityService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         return "tasks/all";
     }
 
     @GetMapping("/desc")
     public String getDesc(Model model) {
         model.addAttribute("priorities", priorityService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         return "tasks/desc";
     }
 
@@ -84,6 +94,7 @@ public class TaskController {
         }
         model.addAttribute("task", taskOptional.get());
         model.addAttribute("priorities", priorityService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         return "tasks/update";
     }
 
@@ -98,8 +109,14 @@ public class TaskController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute Task task, @SessionAttribute User user) {
+    public String add(@ModelAttribute Task task, @SessionAttribute User user, @RequestParam("categoryId") List<Integer> categoriesId) {
         task.setUser(user);
+        Set<Category> categories = new HashSet<>();
+        for (int c : categoriesId) {
+            Optional<Category> category = categoryService.findById(c);
+            category.ifPresent(categories::add);
+        }
+        task.setCategories(categories);
         taskService.save(task);
         return "redirect:/tasks";
     }

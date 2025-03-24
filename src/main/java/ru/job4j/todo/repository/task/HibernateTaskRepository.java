@@ -12,6 +12,8 @@ import java.util.*;
 public class HibernateTaskRepository implements TaskRepository {
     private final CrudRepository crudRepository;
 
+    private final String from = "from Task f JOIN FETCH f.priority JOIN FETCH f.categories";
+
     @Override
     public Task save(Task task) {
         crudRepository.run(session -> session.save(task));
@@ -40,25 +42,24 @@ public class HibernateTaskRepository implements TaskRepository {
 
     @Override
     public Optional<Task> findById(int id) {
-        String query = "from Task f JOIN FETCH f.priority WHERE f.id = :fId";
+        String query = from + " WHERE f.id = :fId";
         return crudRepository.optional(query, Map.of("fId", id), Task.class);
     }
 
     @Override
     public List<Task> findAll() {
-        String query = "from Task f JOIN FETCH f.priority";
-        return crudRepository.query(query, Task.class);
+        return crudRepository.query(from, Task.class);
     }
 
     @Override
     public List<Task> findNew() {
-        String query = "from Task f JOIN FETCH f.priority WHERE f.done = false";
+        String query = from + " WHERE f.done = false";
         return crudRepository.query(query, Task.class);
     }
 
     @Override
     public List<Task> findDone() {
-        String query = "from Task f JOIN FETCH f.priority WHERE f.done = true";
+        String query = from + " WHERE f.done = true";
         return crudRepository.query(query, Task.class);
     }
 }
