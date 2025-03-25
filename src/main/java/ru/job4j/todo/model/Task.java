@@ -4,8 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -37,12 +37,12 @@ public class Task {
             joinColumns = { @JoinColumn(name = "task_id") },
             inverseJoinColumns = { @JoinColumn(name = "category_id") }
     )
-    private Set<Category> categories = new HashSet<>();
+    private List<Category> categories = new ArrayList<>();
 
     Task() {
     }
 
-    Task(int id, String title, String description, User user, Priority priority, Set<Category> categories) {
+    Task(int id, String title, String description, User user, Priority priority, List<Category> categories) {
         this.id = id;
         this.title = title;
         this.description = description;

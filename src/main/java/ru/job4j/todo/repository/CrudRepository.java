@@ -53,6 +53,17 @@ public class CrudRepository {
         return tx(command);
     }
 
+    public <T> List<T> query(String query, Map<String, Object> args, Class<T> cl) {
+        Function<Session, List<T>> command = session -> {
+            Query sq = session.createQuery(query, cl);
+            for (Map.Entry<String, Object> arg : args.entrySet()) {
+                sq.setParameter(arg.getKey(), arg.getValue());
+            }
+            return sq.list();
+        };
+        return tx(command);
+    }
+
     public <T> T tx(Function<Session, T> command) {
         Transaction transaction = null;
         Session session = sf.openSession();

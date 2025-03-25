@@ -12,7 +12,7 @@ import java.util.*;
 public class HibernateTaskRepository implements TaskRepository {
     private final CrudRepository crudRepository;
 
-    private final String from = "from Task f JOIN FETCH f.priority JOIN FETCH f.categories";
+    private final String from = "SELECT DISTINCT f from Task f JOIN FETCH f.priority JOIN FETCH f.categories";
 
     @Override
     public Task save(Task task) {

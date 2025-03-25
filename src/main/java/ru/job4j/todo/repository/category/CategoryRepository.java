@@ -3,11 +3,11 @@ package ru.job4j.todo.repository.category;
 import ru.job4j.todo.model.Category;
 
 import java.util.Collection;
-import java.util.Optional;
+import java.util.List;
 
 public interface CategoryRepository {
 
-    Optional<Category> findById(int id);
+    Collection<Category> findByList(List<Integer> categoriesId);
 
     Collection<Category> findAll();
 }

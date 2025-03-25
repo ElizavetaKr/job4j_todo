@@ -4,18 +4,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
-import ru.job4j.todo.repository.category.CategoryRepository;
 import ru.job4j.todo.service.category.CategoryService;
 import ru.job4j.todo.service.priority.PriorityService;
 import ru.job4j.todo.service.task.TaskService;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Controller
 @AllArgsConstructor
@@ -111,12 +107,7 @@ public class TaskController {
     @PostMapping("/add")
     public String add(@ModelAttribute Task task, @SessionAttribute User user, @RequestParam("categoryId") List<Integer> categoriesId) {
         task.setUser(user);
-        Set<Category> categories = new HashSet<>();
-        for (int c : categoriesId) {
-            Optional<Category> category = categoryService.findById(c);
-            category.ifPresent(categories::add);
-        }
-        task.setCategories(categories);
+        task.getCategories().addAll(categoryService.findByList(categoriesId));
         taskService.save(task);
         return "redirect:/tasks";
     }
