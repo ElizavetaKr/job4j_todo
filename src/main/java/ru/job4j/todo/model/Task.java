@@ -20,7 +20,7 @@ public class Task {
 
     private String title;
     private String description;
-    private LocalDateTime created = LocalDateTime.now();
+    private LocalDateTime created;
     private boolean done = false;
 
     @ManyToOne

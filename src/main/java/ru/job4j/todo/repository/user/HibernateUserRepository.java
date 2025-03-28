@@ -5,8 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.repository.CrudRepository;
 
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 @AllArgsConstructor
@@ -29,5 +28,14 @@ public class HibernateUserRepository implements UserRepository {
     public Optional<User> findByLoginAndPassword(String login, String password) {
         String query = "from User WHERE login = :fLogin AND password = :fPassword";
         return crudRepository.optional(query, Map.of("fLogin", login, "fPassword", password), User.class);
+    }
+
+    @Override
+    public List<TimeZone> findAllZones() {
+        List<TimeZone> zones = new ArrayList<>();
+        for (String timeId : TimeZone.getAvailableIDs()) {
+            zones.add(TimeZone.getTimeZone(timeId));
+        }
+        return zones;
     }
 }

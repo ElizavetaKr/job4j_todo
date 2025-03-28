@@ -10,6 +10,8 @@ import ru.job4j.todo.service.category.CategoryService;
 import ru.job4j.todo.service.priority.PriorityService;
 import ru.job4j.todo.service.task.TaskService;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -109,6 +111,7 @@ public class TaskController {
         task.setUser(user);
         task.getCategories().addAll(categoryService.findByList(categoriesId));
         taskService.save(task);
+        task.setCreated(LocalDateTime.now(ZoneId.of(user.getTimezone())));
         return "redirect:/tasks";
     }
 

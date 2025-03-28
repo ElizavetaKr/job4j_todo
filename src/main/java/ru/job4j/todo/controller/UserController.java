@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.user.UserService;
 
+import java.util.TimeZone;
+
 @ThreadSafe
 @Controller
 @AllArgsConstructor
@@ -24,12 +26,16 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/register")
-    public String getRegistrationPage() {
+    public String getRegistrationPage(Model model) {
+        model.addAttribute("zones", userService.findAllZones());
         return "users/register";
     }
 
     @PostMapping("/register")
     public String register(@ModelAttribute User user, Model model) {
+        if (user.getTimezone().isEmpty()) {
+            user.setTimezone(TimeZone.getDefault().getID());
+        }
         var savedUser = userService.save(user);
         if (savedUser.isEmpty()) {
             model.addAttribute("message", "Пользователь с такой почтой уже существует");
